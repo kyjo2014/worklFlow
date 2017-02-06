@@ -6,35 +6,35 @@ let qn = require('gulp-qn')
 let sftp = require('gulp-sftp')
 let exec = require('child_process').exec
 let fs = require('fs')
-let iconfont = require('iconfont')
+let iconfont = require('gulp-iconfont')
 
 // config
 let qnConfig = require('./cdnpass.json')
-let serverConfig = require('./ftppass.json')
+// let serverConfig = require('./ftppass.json')
 
 
 
 /**
  *调用该任务需要使用额外参数  --projectname
+ * 未完善
  */
 gulp.task('mktemplate', () => {
     console.log(process.argv.slice(-2))
     if (process.argv.slice(-2, -1) == '--projectname') {
         return new Promise(() => {
             let curWork = exec(`vue init webpack ${process.argv.slice(-1)}`, (err, stdout, stderr) => {
-                console.log(stdout)
+                // console.log(stdout)
             })
-            curWork.stdout.on('data', (data) => {
-                console.log(data)
-            })
-            curWork.stdin.write('y\n')
+            process.stdin.pipe(curWork.stdin)
+            curWork.stdout.pipe(process.stdout)
+            // curWork.stdin.write('y\n')
         })
     }
     console.log()
 
 })
 
-gulp.task('default', () => {
+gulp.task('default', [], () => {
     return gulp.src()
 })
 
